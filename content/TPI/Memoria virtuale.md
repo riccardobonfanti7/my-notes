@@ -1,0 +1,6 @@
+La **memoria virtuale** è una tecnica che permette al computer di usare una parte del disco rigido come estensione della RAM. Quando la **RAM è piena**, il sistema operativo **sposta temporaneamente su disco alcuni dati o processi inattivi (swap out) per fare spazio in RAM per altri programmi attivi**. Questo consente di eseguire programmi più grandi della memoria fisica disponibile, dando l'impressione di avere più RAM di quella realmente installata.
+
+**Program counter cambia:**
+Il **program counter** (PC) è un registro che tiene traccia dell'istruzione successiva da eseguire. Quando avviene uno **swap out** in memoria virtuale, cioè lo spostamento temporaneo di un processo inattivo sul disco, il sistema deve aggiornare il program counter per ricordare a che punto si trovava l’esecuzione di quel processo.
+
+Quando il processo viene riportato in RAM per continuare l’esecuzione, il program counter viene ripristinato al valore corretto, consentendo al processo di riprendere dall'istruzione esatta in cui era stato interrotto. Questo aggiornamento è essenziale per mantenere la coerenza dell'esecuzione del programma.
