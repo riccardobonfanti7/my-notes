@@ -805,3 +805,201 @@ British English: Do you consider grey to be a colour or a shade
 
 
 In generale, l'opzione `-E` permette di usare queste espressioni regolari avanzate direttamente con `grep`, senza bisogno di `egrep`.
+
+
+
+## Par. 15.2 - Differenza tra `su` e `sudo`
+
+Il comando `su` cambia l'identità dell'utente attuale a un altro utente (spesso root) e apre una nuova shell con tali privilegi.
+
+Il comando `sudo`, invece, permette di eseguire singoli comandi con privilegi elevati senza cambiare l'identità dell'utente corrente.
+
+---
+
+## Par. 15.3 - Informazioni sugli utenti del sistema
+
+### Par. 15.3.1 - File con le informazioni sugli utenti
+
+Le informazioni sugli utenti del sistema sono memorizzate nel file `/etc/passwd`. Questo file contiene dettagli come:
+
+- Nome utente
+- ID utente (UID)
+- ID del gruppo
+- Nome completo dell'utente
+- Directory home
+- Shell predefinita
+
+### File con le password degli utenti
+
+Le password degli utenti sono conservate nel file `/etc/shadow`, leggibile solo dall'utente `root` per garantire la sicurezza. Per accedervi, un utente deve loggarsi come `root` o usare `sudo`.
+
+### File con la shell di login
+
+La shell di login predefinita di un utente è specificata nel file `/etc/passwd`, nell'ultimo campo della riga corrispondente all'utente.
+
+---
+
+## Par. 15.5 - Informazioni sui gruppi utente
+
+I gruppi di utenza del sistema sono elencati nel file `/etc/group`. Questo file contiene informazioni come:
+
+- Nome del gruppo
+- ID del gruppo (GID)
+- Elenco degli utenti membri del gruppo
+
+---
+
+## Par. 15.7 - Comando `who`
+
+Il comando `who` mostra l'elenco degli utenti loggati nel sistema. È utile per:
+
+- Monitorare l'attività degli utenti
+- Gestire risorse
+- Identificare attività sospette
+
+---
+
+## Par. 15.8 - Cronologia degli accessi
+
+La cronologia degli accessi è registrata nel file `/var/log/wtmp`.
+
+### Comando `last`
+
+Il comando `last` legge il file `/var/log/wtmp` e mostra la cronologia degli accessi. È utile per individuare tentativi di accesso non autorizzati.
+
+---
+
+## Par. 16.2 - Utilità dei gruppi utente
+
+Creare gruppi utente facilita la gestione dei permessi e delle autorizzazioni. L'elenco dei gruppi è contenuto in `/etc/group`.
+
+### Comandi per la gestione dei gruppi:
+
+- **Visualizzare gruppi:** `cat /etc/group` o `less /etc/group`
+- **Creare un gruppo:** `groupadd nomegruppo`
+- **Eliminare un gruppo:** `groupdel nomegruppo`
+
+---
+
+## Par. 16.3 - Gestione utenti
+
+### Comando per verificare i valori di default per la creazione di un utente
+
+`useradd -D`
+
+### Differenza tra `/etc/login.defs` e `/etc/default/useradd`
+
+- ``: Configurazioni globali per la gestione degli utenti (password, UID, GID, etc.).
+- ``: Impostazioni predefinite per il comando `useradd` (shell, directory home, gruppo).
+
+### Requisiti per il nome utente
+
+Il nome utente deve:
+
+- Essere alfanumerico
+- Essere in minuscolo
+- Non superare i 32 caratteri
+
+### Comandi per la gestione utenti:
+
+- **Creare un utente e assegnarlo a un gruppo:** `useradd -G nomegruppo nomeutente`
+- **Assegnare una password a un utente:** `passwd nomeutente`
+
+---
+
+## Par. 17.2 - Proprietari dei file
+
+Ogni file ha un utente e un gruppo proprietario. Per individuarli, usare:
+
+```bash
+ls -l nomefile
+```
+
+---
+
+## Par. 17.4 / 17.5 - Modifica dei proprietari di un file
+
+- **Cambiare il proprietario:** `chown nuovo_proprietario nomefile`
+- **Cambiare il gruppo:** `chown :nuovo_gruppo nomefile`
+- **Cambiare proprietario e gruppo:** `chown nuovo_proprietario:nuovo_gruppo nomefile`
+
+---
+
+## Par. 17.8 - Modifica dei permessi di accesso
+
+Il comando `chmod` viene utilizzato per modificare i permessi di accesso ai file:
+
+```bash
+chmod permessi nomefile
+```
+
+
+## Comandi per la gestione di file e directory
+
+- **Creare directory e file:**
+
+    ```bash
+    mkdir /tmp/priv-dir /tmp/pub-dir
+    touch /tmp/priv-dir/priv-file /tmp/pub-dir/pub-file
+    ```
+
+- **Verificare proprietari e permessi:**
+
+    ```bash
+    ls -l /tmp/priv-dir /tmp/pub-dir
+    ```
+
+- **Visualizzare file nascosti in `/tmp`**
+
+    ```bash
+    ls -la /tmp
+    ```
+
+- **Modificare permessi di directory e file:**
+
+    ```bash
+    chmod 700 /tmp/priv-dir  # Rende la directory accessibile solo al proprietario
+    chmod o+w /tmp/pub-dir   # Concede permessi di scrittura a tutti sulla directory pubblica
+    chmod go-rwx /tmp/priv-dir/priv-file  # Rimuove tutti i permessi per gruppo e altri sull'elemento privato
+    chmod 666 /tmp/pub-dir/pub-file  # Permette a tutti di leggere e scrivere il file pubblico
+    ```
+
+- **Creare ed eseguire uno script Bash:**
+
+    ```bash
+    echo "date" > /tmp/test.sh
+    chmod +x /tmp/test.sh  # Rende lo script eseguibile
+    /tmp/test.sh
+    ```
+
+
+## Notazione ottale dei permessi
+
+La notazione ottale rappresenta i permessi di un file/directory con numeri da 0 a 7:
+
+- **4** = Lettura (`r`)
+- **2** = Scrittura (`w`)
+- **1** = Esecuzione (`x`)
+
+La combinazione si ottiene sommando i valori:
+
+- **7** = `rwx`
+- **6** = `rw-`
+- **5** = `r-x`
+- **4** = `r--`
+
+Esempio: `chmod 755 file` assegna permessi `rwx r-x r-x`.
+
+## Differenza tra `chown` e `chgrp`
+
+- **`chown`** modifica il proprietario di un file/directory:
+
+    ```bash
+    chown nuovo_utente file
+    ```
+
+- **`chgrp`** modifica solo il gruppo associato:
+
+    ```bash
+    chgrp nuovo_gruppo file
+    ```
